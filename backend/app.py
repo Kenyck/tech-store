@@ -1,16 +1,8 @@
 from app import create_app, db
-from flask_cors import CORS
-from app.routes import rotablue  # Importa o blueprint 'rotablue'
 
-app = create_app()
-
-# Permite requisições de qualquer origem
-CORS(app, resources={r"/*": {"origins": "*"}})
-
-# Registra o blueprint com prefixo '/api'
-app.register_blueprint(rotablue, url_prefix='/api')  # Usa 'rotablue' diretamente
+app = create_app()  # Cria a instância do app já com o blueprint registrado
 
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()  # Garante que as tabelas são criadas
+        db.create_all()  # Garante que as tabelas são criadas no banco de dados
     app.run(debug=True)

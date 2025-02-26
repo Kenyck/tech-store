@@ -3,7 +3,7 @@ from flask_cors import CORS
 from app.models import Product
 from app import db
 
-rotablue = Blueprint('rotablue', __name__)  # Nome do blueprint atualizado para 'rotablue'
+rotablue = Blueprint('rotablue', __name__)  # Nome único do blueprint
 
 # Aplica CORS apenas ao Blueprint
 CORS(rotablue)
@@ -27,7 +27,10 @@ def add_product():
 @rotablue.route('/products', methods=['GET'])
 def get_products():
     products = Product.query.all()
-    return jsonify([{'id': p.id, 'name': p.name, 'price': p.price, 'stock': p.stock} for p in products])
+    return jsonify([
+        {'id': p.id, 'name': p.name, 'price': p.price, 'stock': p.stock}
+        for p in products
+    ])
 
 @rotablue.route('/products/<int:id>', methods=['PUT'])
 def update_product(id):
