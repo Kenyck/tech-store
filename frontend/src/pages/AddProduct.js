@@ -1,57 +1,69 @@
-import React, { useState, useEffect } from 'react';
-import api from '../axios'; // Importa a instância configurada do Axios
+import React, { useState } from 'react';
+import api from '../axios';
 
 const AddProduct = () => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [stock, setStock] = useState('');
+  const [message, setMessage] = useState(null);
+  const [error, setError] = useState(null);
 
-  // Define a função handleAddProduct
   const handleAddProduct = async (e) => {
-    e.preventDefault(); // Previne o comportamento padrão de enviar o formulário
+    e.preventDefault();
+    setMessage(null);
+    setError(null);
 
-    // Cria o objeto product com os dados do formulário
-    const product = {
-      name,
-      price,
-      stock,
-    };
+    const product = { name, price, stock };
 
     try {
-      // Faz a requisição para o back-end usando o Axios
       const response = await api.post('/products', product);
-      console.log('Produto adicionado com sucesso:', response.data);
-      // Você pode adicionar um código para limpar os campos ou exibir uma mensagem de sucesso
+      setMessage('Produto cadastrado com sucesso!');
+      setName('');
+      setPrice('');
+      setStock('');
     } catch (error) {
-      console.error('Erro ao cadastrar produto:', error);
-      // Você pode adicionar um código para mostrar um alerta de erro
+      setError('Erro ao cadastrar produto. Verifique os dados.');
     }
   };
 
   return (
-    <div>
-      <h2>Adicionar Produto</h2>
-      <form onSubmit={handleAddProduct}>
-        <input
-          type="text"
-          placeholder="Nome do Produto"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Preço"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Quantidade em Estoque"
-          value={stock}
-          onChange={(e) => setStock(e.target.value)}
-        />
-        <button type="submit">Adicionar</button>
-      </form>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
+        <h2 className="text-xl font-semibold text-gray-700 mb-4">Adicionar Produto</h2>
+
+        {message && <p className="text-green-600 text-sm">{message}</p>}
+        {error && <p className="text-red-600 text-sm">{error}</p>}
+
+        <form onSubmit={handleAddProduct} className="space-y-4">
+          <input
+            type="text"
+            placeholder="Nome do Produto"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none"
+          />
+          <input
+            type="number"
+            placeholder="Preço"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none"
+          />
+          <input
+            type="number"
+            placeholder="Quantidade em Estoque"
+            value={stock}
+            onChange={(e) => setStock(e.target.value)}
+            className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none"
+          />
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+          >
+            Adicionar
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
