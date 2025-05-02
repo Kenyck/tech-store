@@ -15,8 +15,14 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
 
-    # Importa as rotas depois que o app foi criado
-    from app.routes import rotablue
-    app.register_blueprint(rotablue, url_prefix='/api')  # Registra com URL prefix
+    # Importações locais para evitar circular imports
+    from app.routes.product_routes import product_blueprint
+    from app.routes.auth_routes import auth_blueprint
+
+    app.register_blueprint(product_blueprint, url_prefix='/api')
+    app.register_blueprint(auth_blueprint, url_prefix='/api')
 
     return app
+
+# Exporta db para uso externo (ex: create_admin.py)
+__all__ = ["create_app", "db"]

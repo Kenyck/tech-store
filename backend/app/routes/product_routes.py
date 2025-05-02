@@ -3,12 +3,11 @@ from flask_cors import CORS
 from app.models import Product
 from app import db
 
-rotablue = Blueprint('rotablue', __name__)  # Nome único do blueprint
 
-# Aplica CORS apenas ao Blueprint
-CORS(rotablue)
+product_blueprint = Blueprint('product', __name__)
+CORS(product_blueprint)
 
-@rotablue.route('/products', methods=['POST'])
+@product_blueprint.route('/products', methods=['POST'])
 def add_product():
     data = request.get_json()
     try:
@@ -24,7 +23,7 @@ def add_product():
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
 
-@rotablue.route('/products', methods=['GET'])
+@product_blueprint.route('/products', methods=['GET'])
 def get_products():
     products = Product.query.all()
     return jsonify([
@@ -32,7 +31,7 @@ def get_products():
         for p in products
     ])
 
-@rotablue.route('/products/<int:id>', methods=['PUT'])
+@product_blueprint.route('/products/<int:id>', methods=['PUT'])
 def update_product(id):
     data = request.get_json()
     product = Product.query.get(id)
@@ -43,10 +42,10 @@ def update_product(id):
         product.stock = data.get('stock', product.stock)
         db.session.commit()
         return jsonify({'message': 'Produto atualizado com sucesso!'})
-    
+
     return jsonify({'message': 'Produto não encontrado!'}), 404
 
-@rotablue.route('/products/<int:id>', methods=['DELETE'])
+@product_blueprint.route('/products/<int:id>', methods=['DELETE'])
 def delete_product(id):
     product = Product.query.get(id)
 
@@ -54,5 +53,6 @@ def delete_product(id):
         db.session.delete(product)
         db.session.commit()
         return jsonify({'message': 'Produto removido com sucesso!'})
-    
+
     return jsonify({'message': 'Produto não encontrado!'}), 404
+
