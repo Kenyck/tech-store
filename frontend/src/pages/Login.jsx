@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 
-const Login = ({ setIsAdmin }) => {
-  const [username, setUsername] = useState('');
+const Login = ({ setIsAdmin, setUsername }) => {
+  const [usernameInput, setUsernameInput] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
@@ -13,11 +13,9 @@ const Login = ({ setIsAdmin }) => {
     try {
       const response = await fetch('http://localhost:5000/api/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          username,
+          username: usernameInput,
           password,
         }),
       });
@@ -25,15 +23,15 @@ const Login = ({ setIsAdmin }) => {
       const data = await response.json();
 
       if (response.ok) {
-        // Atualiza o estado de admin
+        localStorage.setItem('token', data.token);
         setIsAdmin(data.isAdmin);
-        localStorage.setItem('isAdmin', data.isAdmin.toString());
+        setUsername(data.username);
         toast.success('Login bem-sucedido!');
-        navigate('/');
+        navigate('/');  // após o login, envia para Home; ou use `/admin` se quiser
       } else {
         toast.error(data.error || 'Erro ao fazer login.');
       }
-    } catch (error) {
+    } catch {
       toast.error('Erro ao tentar se conectar.');
     }
   };
@@ -47,13 +45,13 @@ const Login = ({ setIsAdmin }) => {
           <input
             type="text"
             className="w-full p-2 border border-gray-300 rounded mt-1"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={usernameInput}
+            onChange={(e) => setUsernameInput(e.target.value)}
             required
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Password</label>
+          <label className="block text-sm font-medium text-gray-700">Senha</label>
           <input
             type="password"
             className="w-full p-2 border border-gray-300 rounded mt-1"

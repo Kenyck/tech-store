@@ -2,13 +2,15 @@ from flask import Blueprint, request, jsonify
 from flask_cors import CORS
 from app.models import Product
 from app import db
-
+from app.auth_utils import token_required
 
 product_blueprint = Blueprint('product', __name__)
 CORS(product_blueprint)
 
+# Criar novo produto (admin apenas)
 @product_blueprint.route('/products', methods=['POST'])
-def add_product():
+@token_required(admin_only=True)
+def add_product(current_user):
     data = request.get_json()
     try:
         new_product = Product(
@@ -23,6 +25,7 @@ def add_product():
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
 
+# Obter lista de produtos (sem necessidade de autenticação)
 @product_blueprint.route('/products', methods=['GET'])
 def get_products():
     products = Product.query.all()
@@ -31,8 +34,10 @@ def get_products():
         for p in products
     ])
 
+# Atualizar produto (admin apenas)
 @product_blueprint.route('/products/<int:id>', methods=['PUT'])
-def update_product(id):
+@token_required(admin_only=True)
+def update_product(current_user, id):
     data = request.get_json()
     product = Product.query.get(id)
 
@@ -45,8 +50,10 @@ def update_product(id):
 
     return jsonify({'message': 'Produto não encontrado!'}), 404
 
+# Remover produto (admin apenas)
 @product_blueprint.route('/products/<int:id>', methods=['DELETE'])
-def delete_product(id):
+@token_required(admin_only=True)
+def delete_product(current_user, id):
     product = Product.query.get(id)
 
     if product:
@@ -55,4 +62,3 @@ def delete_product(id):
         return jsonify({'message': 'Produto removido com sucesso!'})
 
     return jsonify({'message': 'Produto não encontrado!'}), 404
-

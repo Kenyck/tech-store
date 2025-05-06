@@ -7,9 +7,11 @@ const ManageProducts = () => {
   const [price, setPrice] = useState('');
   const [stock, setStock] = useState('');
   const [editingProduct, setEditingProduct] = useState(null);
+  
 
   // Carregar produtos ao montar o componente
   useEffect(() => {
+    console.log("Carregando produtos...");
     fetchProducts();
   }, []);
 

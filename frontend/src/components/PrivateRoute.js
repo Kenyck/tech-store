@@ -1,13 +1,13 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 
-const PrivateRoute = ({ children, isAdmin }) => {
+const PrivateRoute = ({ isAdmin, children }) => {
   if (!isAdmin) {
-    // Se não for admin, redireciona para login
-    return <Navigate to="/login" />;
+    // Se o usuário não for admin, redireciona para a página inicial
+    return <Navigate to="/" />;
   }
 
-  return children;
+  return children; // Se for admin, renderiza o conteúdo da página
 };
 
 export default PrivateRoute;
