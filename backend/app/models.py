@@ -16,6 +16,14 @@ class Product(db.Model):
         self.stock = stock
         self.description = description
 
+class CartItem(db.Model):
+    __tablename__ = 'cart_items'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False, default=1)
+
 class User(db.Model):
     __tablename__ = 'user'  # mantém esse nome para bater com o nome da tabela no banco
 

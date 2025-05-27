@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import api from '../axios';
+import { useCart } from '../context/CartContext';
+import { toast } from 'react-hot-toast';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState('');
+  const { addToCart } = useCart();
+
+  // Verifica se há token no localStorage
+  const isLoggedIn = Boolean(localStorage.getItem('token'));
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -12,11 +18,21 @@ const Home = () => {
         setProducts(response.data);
       } catch (error) {
         console.error('Erro ao buscar produtos:', error);
+        toast.error('Erro ao buscar produtos');
       }
     };
 
     fetchProducts();
   }, []);
+
+  const handleAddToCart = async (product) => {
+    try {
+      await addToCart(product);
+    } catch (error) {
+      console.error('Erro ao adicionar produto ao carrinho:', error);
+      toast.error('Erro ao adicionar ao carrinho');
+    }
+  };
 
   const filteredProducts = products.filter((product) =>
     product.name.toLowerCase().includes(search.toLowerCase())
@@ -34,10 +50,18 @@ const Home = () => {
       />
       <ul className="space-y-2">
         {filteredProducts.map((product) => (
-          <li key={product.id} className="border p-4">
-            <h2 className="font-bold">{product.name}</h2>
-            <p>Preço: R${product.price}</p>
+          <li key={product.id} className="border p-4 rounded shadow">
+            <h2 className="font-bold text-lg">{product.name}</h2>
+            <p>Preço: R$ {product.price.toFixed(2)}</p>
             <p>Em estoque: {product.stock}</p>
+            {isLoggedIn && (
+              <button
+                onClick={() => handleAddToCart(product)}
+                className="mt-3 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+              >
+                Adicionar ao Carrinho
+              </button>
+            )}
           </li>
         ))}
       </ul>

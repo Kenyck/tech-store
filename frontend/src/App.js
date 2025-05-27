@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
@@ -7,81 +7,68 @@ import Login from './pages/Login';
 import Register from './pages/RegisterPage';
 import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
+import CartPage from './pages/CartPage';
+
 import { Toaster } from 'react-hot-toast';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
 
-function App() {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [username, setUsername] = useState('');
+function AppContent() {
+  const { loading } = useAuth();
 
-  // Ao carregar a app, verifica o token e popula estado
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      fetch('http://localhost:5000/api/verify-token', {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then(r => r.json())
-        .then(data => {
-          if (data.username) {
-            setUsername(data.username);
-            setIsAdmin(data.isAdmin);
-          } else {
-            localStorage.removeItem('token');
-          }
-        })
-        .catch(() => localStorage.removeItem('token'));
-    }
-  }, []);
-
-  const isAuthenticated = Boolean(username); // ou !!localStorage.getItem('token')
+  if (loading) return null; // ou um spinner
 
   return (
     <>
-      <Navbar
-        isAdmin={isAdmin}
-        username={username}
-        setIsAdmin={setIsAdmin}
-        setUsername={setUsername}
-      />
+      <Navbar />
       <Toaster position="top-center" reverseOrder={false} />
       <div className="container mx-auto p-4">
         <Routes>
-          {/* pública: Home */}
           <Route path="/" element={<Home />} />
 
-          {/* admin-only */}
           <Route
             path="/admin"
             element={
-              <PrivateRoute isAdmin={isAdmin}>
+              <PrivateRoute>
                 <ManageProducts />
               </PrivateRoute>
             }
           />
 
-          {/* somente para quem NÃO está logado */}
           <Route
             path="/login"
             element={
-              <PublicRoute isAuthenticated={isAuthenticated}>
-                <Login setIsAdmin={setIsAdmin} setUsername={setUsername} />
+              <PublicRoute>
+                <Login />
               </PublicRoute>
             }
           />
+
           <Route
             path="/register"
             element={
-              <PublicRoute isAuthenticated={isAuthenticated}>
+              <PublicRoute>
                 <Register />
               </PublicRoute>
             }
           />
 
-          {/* redireciona qualquer outra URL */}
+          <Route path="/cart" element={<CartPage />} />
+
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
     </>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <CartProvider>
+        <AppContent />
+      </CartProvider>
+    </AuthProvider>
   );
 }
 
