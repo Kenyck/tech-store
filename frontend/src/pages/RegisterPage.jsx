@@ -12,7 +12,7 @@ const Register = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      // Se o token existir, redireciona para a página inicial
+
       navigate('/');
     }
   }, [navigate]);

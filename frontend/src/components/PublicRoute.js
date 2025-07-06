@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 const PublicRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
 
-  if (loading) return null; // ou um spinner de carregamento
+  if (loading) return null;
 
   return !isAuthenticated ? children : <Navigate to="/" />;
 };

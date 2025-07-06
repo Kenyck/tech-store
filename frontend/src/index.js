@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter as Router } from 'react-router-dom'; // Importando o Router
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -14,7 +14,4 @@ root.render(
   </React.StrictMode>
 );
 
-// Se você quiser começar a medir o desempenho na sua aplicação, passe uma função
-// para registrar os resultados (por exemplo: reportWebVitals(console.log))
-// ou envie para um endpoint de analytics. Saiba mais em: https://bit.ly/CRA-vitals
 reportWebVitals();

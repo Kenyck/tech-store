@@ -8,7 +8,7 @@ import { useAuth } from '../context/AuthContext';
 const Navbar = () => {
   const navigate = useNavigate();
   const { cartItems } = useCart();
-  const { user, isAuthenticated, logout } = useAuth(); // Pegando `user` corretamente
+  const { user, isAuthenticated, logout } = useAuth();
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 

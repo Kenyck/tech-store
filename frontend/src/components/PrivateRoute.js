@@ -11,6 +11,5 @@ export default function PrivateRoute({ children }) {
     return <Navigate to="/login" replace />;
   }
 
-  // Se quiser restringir acesso a admin aqui, pode checar user.isAdmin
   return children;
 }

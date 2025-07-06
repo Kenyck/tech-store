@@ -8,7 +8,7 @@ class Product(db.Model):
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(255), nullable=True)
     price = db.Column(db.Float, nullable=False)
-    stock = db.Column(db.Integer, nullable=False)  # Verifique se este campo existe
+    stock = db.Column(db.Integer, nullable=False)
 
     def __init__(self, name, price, stock, description=None):
         self.name = name
@@ -25,7 +25,7 @@ class CartItem(db.Model):
     quantity = db.Column(db.Integer, nullable=False, default=1)
 
 class User(db.Model):
-    __tablename__ = 'user'  # mantém esse nome para bater com o nome da tabela no banco
+    __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)

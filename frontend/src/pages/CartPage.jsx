@@ -14,7 +14,6 @@ function CartPage() {
       navigate('/login');
       return;
     }
-    // Para garantir que o loading some depois que o carrinho estiver carregado
     setLoading(false);
   }, [isAuthenticated, navigate]);
 

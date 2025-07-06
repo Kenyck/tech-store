@@ -5,7 +5,7 @@ from app.models import User
 
 def token_required(admin_only=False):
     def decorator(f):
-        @wraps(f)  # <-- Aqui está a correção!
+        @wraps(f)
         def decorated(*args, **kwargs):
             token = None
 

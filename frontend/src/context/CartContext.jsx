@@ -69,7 +69,7 @@ export const CartProvider = ({ children }) => {
 
       if (!response.ok) throw new Error('Erro ao adicionar no carrinho');
 
-      await fetchCart(); // Atualiza os dados do carrinho com segurança
+      await fetchCart();
       toast.success('Produto adicionado ao carrinho!');
     } catch (err) {
       console.error(err);
@@ -91,7 +91,7 @@ export const CartProvider = ({ children }) => {
 
       if (!response.ok) throw new Error('Erro ao remover item');
 
-      await fetchCart(); // Garante que o estado será atualizado corretamente
+      await fetchCart();
     } catch (err) {
       console.error(err);
       toast.error('Erro ao remover item');
@@ -122,7 +122,7 @@ export const CartProvider = ({ children }) => {
 
       if (!response.ok) throw new Error('Erro ao atualizar quantidade');
 
-      await fetchCart(); // Garante atualização precisa
+      await fetchCart();
     } catch (err) {
       console.error(err);
       toast.error('Erro ao atualizar quantidade');

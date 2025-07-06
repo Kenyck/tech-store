@@ -8,7 +8,6 @@ const Home = () => {
   const [search, setSearch] = useState('');
   const { addToCart } = useCart();
 
-  // Verifica se há token no localStorage
   const isLoggedIn = Boolean(localStorage.getItem('token'));
 
   useEffect(() => {

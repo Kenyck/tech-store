@@ -37,7 +37,6 @@ export const AuthProvider = ({ children }) => {
       .finally(() => setLoading(false));
   }, []);
 
-  // ✅ Corrigido: usando username em vez de email
   const login = async (username, password) => {
     try {
       const res = await fetch(`${API_URL}/api/login`, {

@@ -16,7 +16,7 @@ import { CartProvider } from './context/CartContext';
 function AppContent() {
   const { loading } = useAuth();
 
-  if (loading) return null; // ou um spinner
+  if (loading) return null; 
 
   return (
     <>

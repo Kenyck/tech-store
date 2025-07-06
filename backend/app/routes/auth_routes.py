@@ -47,7 +47,7 @@ def login():
         try:
             token_payload = {
                 'user_id': user.id,
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)  # Token expira em 1 hora
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
             }
 
             token = jwt.encode(token_payload, current_app.config['SECRET_KEY'], algorithm='HS256')
